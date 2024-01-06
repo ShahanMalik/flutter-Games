@@ -36,11 +36,11 @@ class _ChessGameState extends State<ChessGame> {
         actions: [
           IconButton(
             onPressed: _resetGame,
-            icon: Icon(Icons.refresh, color: Colors.white),
+            icon: Icon(Icons.refresh, color: Colors.pink[200]),
           ),
           IconButton(
             onPressed: undo,
-            icon: Icon(Icons.undo, color: Colors.white),
+            icon: Icon(Icons.undo, color: Colors.pink[200]),
           ),
         ],
         automaticallyImplyLeading: false,
@@ -48,6 +48,7 @@ class _ChessGameState extends State<ChessGame> {
         backgroundColor: Colors.green[900],
         title: Text('Chess Game',
             style: TextStyle(
+              color: Colors.pink[200],
               decorationStyle: TextDecorationStyle.solid,
               fontSize: 30.0,
             )),
@@ -201,7 +202,7 @@ class ChessBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 88),
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.2),
       // color: Colors.green,
       child: GridView.builder(
         itemCount: 64,

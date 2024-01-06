@@ -16,6 +16,8 @@ class TicTacToeGameState extends State<TicTacToeGame> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 44, 107, 155),
       appBar: AppBar(
@@ -32,9 +34,9 @@ class TicTacToeGameState extends State<TicTacToeGame> {
                   : 'Player ${playerXTurn ? '❌' : '✔'}\'s turn',
               style: TextStyle(fontSize: 20),
             ),
-            SizedBox(height: 20),
-            _buildGameBoard(),
-            SizedBox(height: 20),
+            SizedBox(height: height * 0.05),
+            _buildGameBoard(width, height),
+            SizedBox(height: height * 0.05),
             ElevatedButton(
               onPressed: () {
                 _resetGame();
@@ -47,7 +49,7 @@ class TicTacToeGameState extends State<TicTacToeGame> {
     );
   }
 
-  Widget _buildGameBoard() {
+  Widget _buildGameBoard(double width, double height) {
     return Column(
       children: List.generate(3, (row) {
         return Row(
@@ -58,8 +60,8 @@ class TicTacToeGameState extends State<TicTacToeGame> {
                 _onTileClicked(row, col);
               },
               child: Container(
-                width: 79,
-                height: 79,
+                width: width * 0.25,
+                height: height * 0.13,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   border: Border.all(color: Colors.white),

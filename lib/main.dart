@@ -1,7 +1,7 @@
-import 'package:animation/Screen/animation3.dart';
+import 'package:animation/Screen/Snake.dart';
 import 'package:animation/Screen/chess.dart';
-import 'package:animation/Screen/hero_screen.dart';
-import 'package:animation/Screen/hero_screen2.dart';
+
+import 'package:animation/Screen/luddo.dart';
 import 'package:animation/Screen/tic_tac_toe.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -44,7 +44,7 @@ class _HomeState extends State<Home> {
       ),
       body: Center(
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             // SvgPicture.string(
             //   'assets/googleIcon.svg',
@@ -52,16 +52,25 @@ class _HomeState extends State<Home> {
             //   height: 15,
             // ),
             ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => HeroScreen(),
-                  ),
-                );
-              },
-              child: Text('Hero Animation'),
-            ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => LudoBoard(),
+                    ),
+                  );
+                },
+                child: Text('Luddo')),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => Snake(),
+                    ),
+                  );
+                },
+                child: Text('Snake')),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -73,28 +82,7 @@ class _HomeState extends State<Home> {
               },
               child: Text('Tic tac toe'),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => CardSwipeDemo(),
-                  ),
-                );
-              },
-              child: Text('Card Swipe'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => PhysicsCardDragDemo(),
-                  ),
-                );
-              },
-              child: Text('Physics Card'),
-            ),
+
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
