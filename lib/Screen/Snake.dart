@@ -48,7 +48,6 @@ class _SnakeState extends State<Snake> {
                           setState(() {});
                         }
                       },
-
                       onHorizontalDragUpdate: (details) {
                         if (snakePosition.last == snakefood) {
                           snakefood = Random().nextInt(300);
@@ -64,16 +63,6 @@ class _SnakeState extends State<Snake> {
                           snakePosition.add(snakePosition.last - 1);
                         }
                       },
-
-                      // onPanUpdate: (details) {
-                      //   setState(() {
-                      //     snakePosition.removeAt(0);
-                      //     snakePosition.add(index);
-                      //     // snakePosition.add(snakePosition.last + 1);
-                      //     // snakePosition.insert(0, index);
-                      //     // snakePosition.removeLast();
-                      //   });
-                      // },
                       child: Container(
                         margin: const EdgeInsets.all(1),
                         decoration: BoxDecoration(

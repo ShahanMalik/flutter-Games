@@ -61,6 +61,7 @@ class _HomeState extends State<Home> {
                   );
                 },
                 child: Text('Luddo')),
+            // snake game
             ElevatedButton(
                 onPressed: () {
                   Navigator.push(
