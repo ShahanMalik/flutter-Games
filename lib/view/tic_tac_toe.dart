@@ -38,6 +38,10 @@ class TicTacToeGameState extends State<TicTacToeGame> {
             _buildGameBoard(width, height),
             SizedBox(height: height * 0.05),
             ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    Color.fromARGB(255, 24, 238, 231)),
+              ),
               onPressed: () {
                 _resetGame();
               },

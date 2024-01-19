@@ -78,7 +78,6 @@ class _LudoBoardState extends State<LudoBoard> {
                   ),
                 ),
                 child: Stack(
-                  // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     GestureDetector(
                       onPanUpdate: (details) {
@@ -88,9 +87,13 @@ class _LudoBoardState extends State<LudoBoard> {
                         });
                       },
                       child: Container(
+                        alignment: Alignment.topCenter,
+                        decoration: ShapeDecoration(
+                          shape: CircleBorder(),
+                          color: Color.fromARGB(255, 166, 208, 243),
+                        ),
                         height: height,
                         width: width,
-                        color: Color.fromARGB(255, 166, 208, 243),
                         child: Text("🔵"),
                         margin: EdgeInsets.only(
                           left: xPosition < 0 ? 0 : xPosition,
@@ -106,9 +109,13 @@ class _LudoBoardState extends State<LudoBoard> {
                         });
                       },
                       child: Container(
+                        alignment: Alignment.topCenter,
+                        decoration: ShapeDecoration(
+                          shape: CircleBorder(),
+                          color: Color.fromARGB(255, 166, 208, 243),
+                        ),
                         height: height,
                         width: width,
-                        color: Color.fromARGB(255, 166, 208, 243),
                         child: Text("🔵"),
                         margin: EdgeInsets.only(
                           left: x2Position < 0 ? 0 : x2Position,
@@ -124,9 +131,13 @@ class _LudoBoardState extends State<LudoBoard> {
                         });
                       },
                       child: Container(
+                        alignment: Alignment.topCenter,
+                        decoration: ShapeDecoration(
+                          shape: CircleBorder(),
+                          color: Color.fromARGB(255, 166, 208, 243),
+                        ),
                         height: height,
                         width: width,
-                        color: Color.fromARGB(255, 166, 208, 243),
                         child: Text("🔵"),
                         margin: EdgeInsets.only(
                           left: x3Position < 0 ? 0 : x3Position,
@@ -142,9 +153,13 @@ class _LudoBoardState extends State<LudoBoard> {
                         });
                       },
                       child: Container(
+                        alignment: Alignment.topCenter,
+                        decoration: ShapeDecoration(
+                          shape: CircleBorder(),
+                          color: Color.fromARGB(255, 166, 208, 243),
+                        ),
                         height: height,
                         width: width,
-                        color: Color.fromARGB(255, 166, 208, 243),
                         child: Text("🔵"),
                         margin: EdgeInsets.only(
                           left: x4Position < 0 ? 0 : x4Position,
@@ -160,9 +175,13 @@ class _LudoBoardState extends State<LudoBoard> {
                         });
                       },
                       child: Container(
+                        alignment: Alignment.topCenter,
+                        decoration: ShapeDecoration(
+                          shape: CircleBorder(),
+                          color: Color.fromARGB(255, 242, 158, 165),
+                        ),
                         height: height,
                         width: width,
-                        color: Color.fromARGB(255, 242, 158, 165),
                         child: Text('🔴'),
                         margin: EdgeInsets.only(
                           left: x1Po < 0 ? 0 : x1Po,
@@ -178,9 +197,13 @@ class _LudoBoardState extends State<LudoBoard> {
                         });
                       },
                       child: Container(
+                        alignment: Alignment.topCenter,
+                        decoration: ShapeDecoration(
+                          shape: CircleBorder(),
+                          color: Color.fromARGB(255, 242, 158, 165),
+                        ),
                         height: height,
                         width: width,
-                        color: Color.fromARGB(255, 242, 158, 165),
                         child: Text('🔴'),
                         margin: EdgeInsets.only(
                           left: x2Po < 0 ? 0 : x2Po,
@@ -198,7 +221,11 @@ class _LudoBoardState extends State<LudoBoard> {
                       child: Container(
                         height: height,
                         width: width,
-                        color: Color.fromARGB(255, 242, 158, 165),
+                        alignment: Alignment.topCenter,
+                        decoration: ShapeDecoration(
+                          shape: CircleBorder(),
+                          color: Color.fromARGB(255, 242, 158, 165),
+                        ),
                         child: Text('🔴'),
                         margin: EdgeInsets.only(
                           left: x3Po < 0 ? 0 : x3Po,
@@ -214,9 +241,13 @@ class _LudoBoardState extends State<LudoBoard> {
                         });
                       },
                       child: Container(
+                        alignment: Alignment.topCenter,
+                        decoration: ShapeDecoration(
+                          shape: CircleBorder(),
+                          color: Color.fromARGB(255, 242, 158, 165),
+                        ),
                         height: height,
                         width: width,
-                        color: Color.fromARGB(255, 242, 158, 165),
                         child: Text('🔴'),
                         margin: EdgeInsets.only(
                           left: x4Po < 0 ? 0 : x4Po,
@@ -241,102 +272,5 @@ class _LudoBoardState extends State<LudoBoard> {
         ],
       ),
     );
-  }
-
-  // Widget LuddoItems(
-  //     BuildContext context, dynamic xPosition, dynamic yPosition) {
-  //   return GestureDetector(
-  //     onPanUpdate: (details) {
-  //       setState(() {
-  //         xPosition += details.delta.dx;
-  //         yPosition += details.delta.dy;
-  //         print(xPosition);
-  //         print("object");
-  //         print(yPosition);
-  //       });
-  //     },
-  //     child: Container(
-  //       height: MediaQuery.of(context).size.height * 0.04,
-  //       width: MediaQuery.of(context).size.width * 0.06,
-  //       color: Colors.blue,
-  //       child: Center(
-  //         child: Text('Drag me'),
-  //       ),
-  //       margin: EdgeInsets.only(
-  //         left: xPosition < 0 ? 0 : xPosition,
-  //         top: yPosition < 0 ? 0 : yPosition,
-  //       ),
-  //     ),
-  //   );
-  // }
-
-//   GestureDetector LuddoItems(
-//       BuildContext context, dynamic xPosition, dynamic yPosition) {
-//     return GestureDetector(
-//       onPanUpdate: (details) {
-//         setState(() {
-//           xPosition += details.delta.dx;
-//           yPosition += details.delta.dy;
-//           print(xPosition);
-//           print("object");
-//           print(yPosition);
-//         });
-//       },
-//       child: Container(
-//         height: MediaQuery.of(context).size.height * 0.04,
-//         width: MediaQuery.of(context).size.width * 0.06,
-//         color: Colors.blue,
-//         child: Center(
-//           child: Text('Drag me'),
-//         ),
-//         margin: EdgeInsets.only(
-//           left: xPosition < 0 ? 0 : xPosition,
-//           top: yPosition < 0 ? 0 : yPosition,
-//         ),
-//       ),
-//     );
-//   }
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Ludo Token'),
-        ),
-        body: Center(
-          child: LudoTokenWidget(),
-        ),
-      ),
-    );
-  }
-}
-
-class LudoTokenWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      size: Size(80.0, 80.0), // Set the size of the widget
-      painter: LudoTokenPainter(),
-    );
-  }
-}
-
-class LudoTokenPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..color = Colors.red; // You can change the color as needed
-
-    final double radius = size.width / 2;
-
-    canvas.drawCircle(Offset(radius, radius), radius, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
   }
 }
