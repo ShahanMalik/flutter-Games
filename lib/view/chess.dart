@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 class ChessPiece {
@@ -15,6 +13,14 @@ class ChessGame extends StatefulWidget {
 }
 
 class _ChessGameState extends State<ChessGame> {
+  List<List<String>> Darkpieces = [
+    ['♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜'],
+    ['♟', '♟', '♟', '♟', '♟', '♟', '♟', '♟'],
+  ];
+  List<List<String>> Lightpieces = [
+    ['♙', '♙', '♙', '♙', '♙', '♙', '♙', '♙'],
+    ['♖', '♘', '♗', '♕', '♔', '♗', '♘', '♖'],
+  ];
   List<List<String>> board = [
     ['♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜'],
     ['♟', '♟', '♟', '♟', '♟', '♟', '♟', '♟'],
@@ -27,6 +33,8 @@ class _ChessGameState extends State<ChessGame> {
   ];
   late List<List<List<String>>> previousBoards = [];
   ChessPiece? _selectedPiece;
+  List<String>? capturedPieces1 = [];
+  List<String>? capturedPieces2 = [];
 
   @override
   Widget build(BuildContext context) {
@@ -46,31 +54,82 @@ class _ChessGameState extends State<ChessGame> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: Colors.green[900],
-        title: Text('Chess Game',
-            style: TextStyle(
-              color: Colors.pink[200],
-              decorationStyle: TextDecorationStyle.solid,
-              fontSize: 30.0,
-            )),
-      ),
-      body: Center(
-        child: ChessBoard(
-          board: board,
-          onPieceMoved: _movePiece,
-          onSquareTap: _handleSquareTap,
-          onSquareLongPress: _handleSquareLongPress,
+        title: Text(
+          'Chess Game',
+          style: TextStyle(
+            color: Colors.pink[200],
+            decorationStyle: TextDecorationStyle.solid,
+            fontSize: 30.0,
+          ),
         ),
       ),
+      body: Stack(
+        children: [
+          ChessBoard(
+            board: board,
+            onPieceMoved: _movePiece,
+            onSquareTap: _handleSquareTap,
+            onSquareLongPress: _handleSquareLongPress,
+          ),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Wrap(
+              children: [
+                Text(
+                  capturedPieces2.toString(),
+                  style: TextStyle(
+                    color: Colors.pink[200],
+                    fontSize: 20.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Wrap(
+              children: [
+                Text(
+                  capturedPieces1.toString(),
+                  style: TextStyle(
+                    color: Colors.pink[200],
+                    fontSize: 20.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
+  }
+
+  bool isLightPiece(String piece) {
+    return Lightpieces.any((row) => row.contains(piece));
   }
 
   void _movePiece(int fromRow, int fromCol, int toRow, int toCol) {
     setState(() {
       previousBoards.add(board.map((row) => List<String>.from(row)).toList());
-      if (board[toRow][toCol].isEmpty) {
-        board[toRow][toCol] = board[fromRow][fromCol];
-        board[fromRow][fromCol] = '';
+
+      // Check if the destination square is not empty
+      if (board[toRow][toCol].isNotEmpty) {
+        // Capture the opponent's piece
+        print('Captured: ${board[toRow][toCol]}');
+        if (isLightPiece(board[toRow][toCol])) {
+          capturedPieces1!.add(board[toRow][toCol]);
+        } else {
+          capturedPieces2!.add(board[toRow][toCol]);
+        }
       }
+
+      // Move the piece
+      board[toRow][toCol] = board[fromRow][fromCol];
+      board[fromRow][fromCol] = '';
     });
   }
 
@@ -85,13 +144,7 @@ class _ChessGameState extends State<ChessGame> {
     });
   }
 
-  void _handleSquareLongPress(int row, int col) {
-    setState(() {
-      if (board[row][col].isNotEmpty) {
-        board[row][col] = '';
-      }
-    });
-  }
+  void _handleSquareLongPress(int row, int col) {}
 
   void _resetGame() {
     setState(() {
@@ -105,15 +158,14 @@ class _ChessGameState extends State<ChessGame> {
         ['♙', '♙', '♙', '♙', '♙', '♙', '♙', '♙'],
         ['♖', '♘', '♗', '♕', '♔', '♗', '♘', '♖'],
       ];
+      capturedPieces1 = [];
+      capturedPieces2 = [];
     });
   }
 
   void undo() {
-    if (previousBoards != [] &&
-        previousBoards.isNotEmpty &&
-        previousBoards.length > 0) {
+    if (previousBoards.isNotEmpty) {
       board = previousBoards.removeLast();
-
       setState(() {});
     } else {
       print('No more moves to undo');
@@ -141,14 +193,12 @@ class ChessSquare extends StatelessWidget {
       feedback: Container(
         width: 40.0,
         height: 40.0,
-        color: isWhite
-            ? Color.fromARGB(255, 255, 255, 255)
-            : Color.fromARGB(255, 255, 255, 255),
+        color: Color.fromARGB(255, 21, 231, 199),
         child: Center(
           child: Text(
             piece,
             style: TextStyle(
-              color: isWhite ? Colors.black : Colors.black,
+              color: Colors.black,
               fontSize: 24.0,
             ),
           ),
@@ -161,7 +211,6 @@ class ChessSquare extends StatelessWidget {
             onTap: onTap,
             onLongPress: onLongPress,
             child: Container(
-              // color: isWhite ? Colors.brown[400] : Colors.brown[200],
               color: isWhite
                   ? Color.fromARGB(255, 184, 134, 116)
                   : Color.fromARGB(255, 227, 193, 111),
@@ -169,7 +218,7 @@ class ChessSquare extends StatelessWidget {
                 child: Text(
                   piece,
                   style: TextStyle(
-                    color: isWhite ? Colors.black : Colors.black,
+                    color: Colors.black,
                     fontSize: 33.0,
                   ),
                 ),
@@ -203,7 +252,6 @@ class ChessBoard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.2),
-      // color: Colors.green,
       child: GridView.builder(
         itemCount: 64,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

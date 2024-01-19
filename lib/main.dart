@@ -1,19 +1,26 @@
-import 'package:animation/Screen/Snake.dart';
-import 'package:animation/Screen/chess.dart';
+import 'package:animation/view/Snake.dart';
+import 'package:animation/view/car_game.dart';
+import 'package:animation/view/chess.dart';
 
-import 'package:animation/Screen/luddo.dart';
-import 'package:animation/Screen/tic_tac_toe.dart';
+import 'package:animation/view/luddo.dart';
+import 'package:animation/view/tic_tac_toe.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(
+    ProviderScope(
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -46,11 +53,17 @@ class _HomeState extends State<Home> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            // SvgPicture.string(
-            //   'assets/googleIcon.svg',
-            //   width: 15,
-            //   height: 15,
-            // ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => RacingCarGameScreen(),
+                  ),
+                );
+              },
+              child: Text('Car Game'),
+            ),
             ElevatedButton(
                 onPressed: () {
                   Navigator.push(
