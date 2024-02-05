@@ -28,6 +28,14 @@ class _LudoBoardState extends State<LudoBoard> {
   double y4Po = 303;
   int value1 = 0;
   int value2 = 0;
+  late final Image;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Image = AssetImage('assets/luddoPic.jpg');
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height * 0.04;
@@ -73,7 +81,7 @@ class _LudoBoardState extends State<LudoBoard> {
                 decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
                   image: DecorationImage(
-                    image: AssetImage('assets/luddoPic.jpg'),
+                    image: Image,
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -94,11 +102,11 @@ class _LudoBoardState extends State<LudoBoard> {
                         ),
                         height: height,
                         width: width,
-                        child: Text("🔵"),
                         margin: EdgeInsets.only(
                           left: xPosition < 0 ? 0 : xPosition,
                           top: yPosition < 0 ? 0 : yPosition,
                         ),
+                        child: Text("🔵"),
                       ),
                     ),
                     GestureDetector(
@@ -116,11 +124,11 @@ class _LudoBoardState extends State<LudoBoard> {
                         ),
                         height: height,
                         width: width,
-                        child: Text("🔵"),
                         margin: EdgeInsets.only(
                           left: x2Position < 0 ? 0 : x2Position,
                           top: y2Position < 0 ? 0 : y2Position,
                         ),
+                        child: Text("🔵"),
                       ),
                     ),
                     GestureDetector(
@@ -138,11 +146,11 @@ class _LudoBoardState extends State<LudoBoard> {
                         ),
                         height: height,
                         width: width,
-                        child: Text("🔵"),
                         margin: EdgeInsets.only(
                           left: x3Position < 0 ? 0 : x3Position,
                           top: y3Position < 0 ? 0 : y3Position,
                         ),
+                        child: Text("🔵"),
                       ),
                     ),
                     GestureDetector(
@@ -160,11 +168,11 @@ class _LudoBoardState extends State<LudoBoard> {
                         ),
                         height: height,
                         width: width,
-                        child: Text("🔵"),
                         margin: EdgeInsets.only(
                           left: x4Position < 0 ? 0 : x4Position,
                           top: y4Position < 0 ? 0 : y4Position,
                         ),
+                        child: Text("🔵"),
                       ),
                     ),
                     GestureDetector(
@@ -182,11 +190,11 @@ class _LudoBoardState extends State<LudoBoard> {
                         ),
                         height: height,
                         width: width,
-                        child: Text('🔴'),
                         margin: EdgeInsets.only(
                           left: x1Po < 0 ? 0 : x1Po,
                           top: y1Po < 0 ? 0 : y1Po,
                         ),
+                        child: Text('🔴'),
                       ),
                     ),
                     GestureDetector(
@@ -204,11 +212,11 @@ class _LudoBoardState extends State<LudoBoard> {
                         ),
                         height: height,
                         width: width,
-                        child: Text('🔴'),
                         margin: EdgeInsets.only(
                           left: x2Po < 0 ? 0 : x2Po,
                           top: y2Po < 0 ? 0 : y2Po,
                         ),
+                        child: Text('🔴'),
                       ),
                     ),
                     GestureDetector(
@@ -226,11 +234,11 @@ class _LudoBoardState extends State<LudoBoard> {
                           shape: CircleBorder(),
                           color: Color.fromARGB(255, 242, 158, 165),
                         ),
-                        child: Text('🔴'),
                         margin: EdgeInsets.only(
                           left: x3Po < 0 ? 0 : x3Po,
                           top: y3Po < 0 ? 0 : y3Po,
                         ),
+                        child: Text('🔴'),
                       ),
                     ),
                     GestureDetector(
@@ -248,11 +256,11 @@ class _LudoBoardState extends State<LudoBoard> {
                         ),
                         height: height,
                         width: width,
-                        child: Text('🔴'),
                         margin: EdgeInsets.only(
                           left: x4Po < 0 ? 0 : x4Po,
                           top: y4Po < 0 ? 0 : y4Po,
                         ),
+                        child: Text('🔴'),
                       ),
                     ),
                   ],

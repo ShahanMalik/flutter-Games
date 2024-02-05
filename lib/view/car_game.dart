@@ -2,8 +2,11 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:rive/rive.dart';
 
 class RacingCarGameScreen extends StatefulWidget {
+  const RacingCarGameScreen({super.key});
+
   @override
   _RacingCarGameScreenState createState() => _RacingCarGameScreenState();
 }
@@ -16,85 +19,87 @@ class _RacingCarGameScreenState extends State<RacingCarGameScreen> {
   List<Obstacle> obstacles = [];
   bool gameOver = false;
 
+  late RiveAnimation asset;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          // color: Colors.green, // Background color
-          image: DecorationImage(
-            colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.9), BlendMode.dstATop),
-            filterQuality: FilterQuality.high,
-            image: AssetImage("assets/car_game_bg.png"),
-            fit: BoxFit.cover,
-          ),
-          // color: Colors.transparent,
-        ),
-        child: GestureDetector(
-          onHorizontalDragUpdate: (details) {
-            // Update car position based on drag
-            setState(() {
-              carPosition +=
-                  details.primaryDelta! / MediaQuery.of(context).size.width;
-              if (carPosition < 0.0) carPosition = 0.0;
-              if (carPosition > 1.0) carPosition = 1.0;
-            });
-          },
-          child: Stack(
-            children: [
-              Positioned(
-                  bottom: 40,
-                  left: carPosition * MediaQuery.of(context).size.width -
-                      carWidth * MediaQuery.of(context).size.width / 2,
-                  child: Icon(
-                    CupertinoIcons.car_detailed,
-                    color: Color.fromARGB(255, 202, 108, 71),
-                    size: 80,
-                  )),
-              for (Obstacle obstacle in obstacles)
-                Positioned(
-                  top: obstacle.top * MediaQuery.of(context).size.height,
-                  left: obstacle.left * MediaQuery.of(context).size.width,
-                  child: SvgPicture.asset(
-                    'assets/bus.svg',
-                    width: obstacle.width * MediaQuery.of(context).size.width,
-                    height:
-                        obstacle.height * MediaQuery.of(context).size.height,
-                  ),
-                ),
-              if (gameOver)
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Game Over!',
-                        style: TextStyle(
-                            fontSize: 24,
-                            color: Color.fromARGB(255, 255, 255, 255)),
+      body: Stack(
+        children: [
+          asset,
+          // RiveAnimation.asset(
+          //   'assets/new_file.riv',
+          //   fit: BoxFit.cover,
+          // ),
+          Container(
+            child: GestureDetector(
+              onHorizontalDragUpdate: (details) {
+                // Update car position based on drag
+                setState(() {
+                  carPosition +=
+                      details.primaryDelta! / MediaQuery.of(context).size.width;
+                  if (carPosition < 0.0) carPosition = 0.0;
+                  if (carPosition > 1.0) carPosition = 1.0;
+                });
+              },
+              child: Stack(
+                children: [
+                  Positioned(
+                      bottom: 40,
+                      left: carPosition * MediaQuery.of(context).size.width -
+                          carWidth * MediaQuery.of(context).size.width / 2,
+                      child: Icon(
+                        CupertinoIcons.car_detailed,
+                        color: Color.fromARGB(255, 202, 108, 71),
+                        size: 80,
+                      )),
+                  for (Obstacle obstacle in obstacles)
+                    Positioned(
+                      top: obstacle.top * MediaQuery.of(context).size.height,
+                      left: obstacle.left * MediaQuery.of(context).size.width,
+                      child: SvgPicture.asset(
+                        'assets/bus.svg',
+                        width:
+                            obstacle.width * MediaQuery.of(context).size.width,
+                        height: obstacle.height *
+                            MediaQuery.of(context).size.height,
                       ),
-                      SizedBox(height: 16),
-                      CupertinoButton(
-                        onPressed: () {
-                          setState(() {
-                            // Restart the game
-                            obstacles.clear();
-                            gameOver = false;
-                          });
-                          startGameLoop();
-                        },
-                        child: Text(
-                          'Restart Game',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                    ),
+                  if (gameOver)
+                    Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Game Over!',
+                            style: TextStyle(
+                                fontSize: 24,
+                                color: Color.fromARGB(255, 255, 255, 255)),
+                          ),
+                          SizedBox(height: 16),
+                          OutlinedButton(
+                            onPressed: () {
+                              setState(() {
+                                // Restart the game
+                                obstacles.clear();
+                                gameOver = false;
+                              });
+                              startGameLoop();
+                            },
+                            child: Text(
+                              'Restart  Game',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 231, 238, 12),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-            ],
+                    ),
+                ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -103,6 +108,11 @@ class _RacingCarGameScreenState extends State<RacingCarGameScreen> {
   void initState() {
     super.initState();
     // Start the game loop
+    asset = RiveAnimation.asset(
+      'assets/new_file.riv',
+      fit: BoxFit.cover,
+    );
+    ;
     startGameLoop();
   }
 
