@@ -73,6 +73,8 @@ class _LudoBoardState extends State<LudoBoard> {
                       ),
                     ],
                   )
+
+                //dices are rolled by the first player
                 else
                   Column(
                     children: [

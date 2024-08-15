@@ -84,6 +84,7 @@ class _SnakeState extends State<Snake> {
                           onHorizontalDragUpdate: (details) {
                             if (updatedSnake.snakePosition.last ==
                                 updatedSnake.snakefood) {
+                              // print('Snake food');
                               snake.updateSnakeFood(Random().nextInt(300));
                               snake.updateScore(5);
                             }

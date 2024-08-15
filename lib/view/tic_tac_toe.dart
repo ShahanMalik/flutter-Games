@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class TicTacToeGame extends StatefulWidget {
   const TicTacToeGame({super.key});
-
   @override
   TicTacToeGameState createState() => TicTacToeGameState();
 }
