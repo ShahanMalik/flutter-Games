@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'package:animation/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
+import 'package:flutter/services.dart';
 
 class Fighter extends StatefulWidget {
   const Fighter({super.key});
@@ -14,11 +16,28 @@ class _FighterState extends State<Fighter> {
   @override
   void initState() {
     super.initState();
+    // Rotate the screen
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         snailMove(timer);
       });
     });
+  }
+
+  @override
+  void dispose() {
+    // Reset the screen orientation
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    super.dispose();
   }
 
 // infront from soldier
@@ -43,7 +62,9 @@ class _FighterState extends State<Fighter> {
   void snailMove(Timer timer) {
     // print('snailLeftMargin $snailLeftMargin');
     if (isSnailKill) {
-      showSnailDeadDialogue();
+      Future.delayed(Duration(milliseconds: 1000), () {
+        showSnailDeadDialogue();
+      });
       timer.cancel();
     }
     if (soldierLeftMargin + 128 >= snailLeftMargin
@@ -77,6 +98,34 @@ class _FighterState extends State<Fighter> {
     } else if (isSoldierWalk) {
       soldierPicindex--;
     } else {}
+  }
+
+  Timer? _walkTimer;
+
+  void _startWalkingLeft() {
+    _walkTimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+      setState(() {
+        walk();
+        if (soldierLeftMargin >= 12) {
+          soldierLeftMargin -= 10;
+        }
+      });
+    });
+  }
+
+  void _startWalkingRight() {
+    _walkTimer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+      setState(() {
+        walk();
+        if (soldierLeftMargin <= maxRightMove) {
+          soldierLeftMargin += 10;
+        }
+      });
+    });
+  }
+
+  void _stopWalking() {
+    _walkTimer?.cancel();
   }
 
   // if (soldierLeftMargin + 128 >= snailLeftMargin
@@ -137,7 +186,7 @@ class _FighterState extends State<Fighter> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-    maxRightMove = (width / 2) + (height / 3);
+    maxRightMove = width * 0.7;
     startlimit = height * 0.9;
     return Scaffold(
       body: Stack(
@@ -194,39 +243,39 @@ class _FighterState extends State<Fighter> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            walk();
-                            if (soldierLeftMargin >= 12) {
-                              soldierLeftMargin -= 10;
-                            }
-                          });
-                        },
-                        icon: Icon(
-                          CupertinoIcons.arrow_left_circle_fill,
-                          color: Color.fromARGB(255, 25, 253, 208),
-                          size: 60,
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onLongPressStart: (_) {
+                            _startWalkingLeft();
+                          },
+                          onLongPressEnd: (_) {
+                            _stopWalking();
+                          },
+                          child: Icon(
+                            CupertinoIcons.arrow_left_circle_fill,
+                            color: Color.fromARGB(255, 25, 253, 208),
+                            size: 60,
+                          ),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            walk();
-                            if (soldierLeftMargin <= maxRightMove) {
-                              soldierLeftMargin += 10;
-                            }
-                          });
-                        },
-                        icon: Icon(
-                          CupertinoIcons.arrow_right_circle_fill,
-                          color: Color.fromARGB(255, 25, 253, 208),
-                          size: 60,
+                        SizedBox(width: 15),
+                        GestureDetector(
+                          onLongPressStart: (_) {
+                            _startWalkingRight();
+                          },
+                          onLongPressEnd: (_) {
+                            _stopWalking();
+                          },
+                          child: Icon(
+                            CupertinoIcons.arrow_right_circle_fill,
+                            color: Color.fromARGB(255, 25, 253, 208),
+                            size: 60,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -272,15 +321,17 @@ class _FighterState extends State<Fighter> {
         content: const Text('Play again?'),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context, 'Cancel'),
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
             child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context, 'OK');
               Navigator.pushReplacement(
                   context,
-                  CupertinoModalPopupRoute(
+                  MaterialPageRoute(
                       builder: (BuildContext context) => Fighter()));
             },
             child: const Text('OK'),

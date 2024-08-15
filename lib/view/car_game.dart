@@ -34,12 +34,14 @@ class _RacingCarGameScreenState extends State<RacingCarGameScreen> {
             child: GestureDetector(
               onHorizontalDragUpdate: (details) {
                 // Update car position based on drag
-                setState(() {
-                  carPosition +=
-                      details.primaryDelta! / MediaQuery.of(context).size.width;
-                  if (carPosition < 0.0) carPosition = 0.0;
-                  if (carPosition > 1.0) carPosition = 1.0;
-                });
+                if (mounted) {
+                  setState(() {
+                    carPosition += details.primaryDelta! /
+                        MediaQuery.of(context).size.width;
+                    if (carPosition < 0.0) carPosition = 0.0;
+                    if (carPosition > 1.0) carPosition = 1.0;
+                  });
+                }
               },
               child: Stack(
                 children: [
@@ -47,11 +49,19 @@ class _RacingCarGameScreenState extends State<RacingCarGameScreen> {
                       bottom: 40,
                       left: carPosition * MediaQuery.of(context).size.width -
                           carWidth * MediaQuery.of(context).size.width / 2,
-                      child: Icon(
-                        CupertinoIcons.car_detailed,
-                        color: Color.fromARGB(255, 202, 108, 71),
-                        size: 80,
-                      )),
+                      child: Text(
+                        '🚔',
+                        style: TextStyle(
+                          fontSize: 99,
+                          color: Colors.white,
+                        ),
+                      )
+                      // Icon(
+                      //   CupertinoIcons.car_detailed,
+                      //   color: Color.fromARGB(255, 202, 108, 71),
+                      //   size: 80,
+                      // ),
+                      ),
                   for (Obstacle obstacle in obstacles)
                     Positioned(
                       top: obstacle.top * MediaQuery.of(context).size.height,
@@ -78,12 +88,14 @@ class _RacingCarGameScreenState extends State<RacingCarGameScreen> {
                           SizedBox(height: 16),
                           OutlinedButton(
                             onPressed: () {
-                              setState(() {
-                                // Restart the game
-                                obstacles.clear();
-                                gameOver = false;
-                              });
-                              startGameLoop();
+                              if (mounted) {
+                                setState(() {
+                                  // Restart the game
+                                  obstacles.clear();
+                                  gameOver = false;
+                                });
+                                startGameLoop();
+                              }
                             },
                             child: Text(
                               'Restart  Game',
@@ -106,12 +118,12 @@ class _RacingCarGameScreenState extends State<RacingCarGameScreen> {
 
   @override
   void initState() {
-    super.initState();
     // Start the game loop
     asset = RiveAnimation.asset(
       'assets/new_file.riv',
       fit: BoxFit.cover,
     );
+    super.initState();
     ;
     startGameLoop();
   }
@@ -119,7 +131,7 @@ class _RacingCarGameScreenState extends State<RacingCarGameScreen> {
   void startGameLoop() {
     // Update the obstacles' positions in a loop
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      if (!gameOver) {
+      if (!gameOver && mounted) {
         setState(() {
           // Update existing obstacles
           obstacles.forEach((obstacle) {
@@ -170,7 +182,8 @@ class _RacingCarGameScreenState extends State<RacingCarGameScreen> {
       if (carLeft < obstacleRight &&
           carRight > obstacleLeft &&
           carTop < obstacleBottom &&
-          carBottom > obstacleTop) {
+          carBottom > obstacleTop &&
+          mounted) {
         // Collision occurred, set game over flag
         setState(() {
           gameOver = true;

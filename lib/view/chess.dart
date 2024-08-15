@@ -7,20 +7,38 @@ class ChessPiece {
   ChessPiece({required this.row, required this.col});
 }
 
+class GameState {
+  final List<List<String>> board;
+  final List<String> capturedPieces1;
+  final List<String> capturedPieces2;
+
+  GameState({
+    required this.board,
+    required this.capturedPieces1,
+    required this.capturedPieces2,
+  });
+
+  GameState copyWith({
+    List<List<String>>? board,
+    List<String>? capturedPieces1,
+    List<String>? capturedPieces2,
+  }) {
+    return GameState(
+      board: board ?? this.board.map((row) => List<String>.from(row)).toList(),
+      capturedPieces1:
+          List<String>.from(capturedPieces1 ?? this.capturedPieces1),
+      capturedPieces2:
+          List<String>.from(capturedPieces2 ?? this.capturedPieces2),
+    );
+  }
+}
+
 class ChessGame extends StatefulWidget {
   @override
   _ChessGameState createState() => _ChessGameState();
 }
 
 class _ChessGameState extends State<ChessGame> {
-  List<List<String>> Darkpieces = [
-    ['♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜'],
-    ['♟', '♟', '♟', '♟', '♟', '♟', '♟', '♟'],
-  ];
-  List<List<String>> Lightpieces = [
-    ['♙', '♙', '♙', '♙', '♙', '♙', '♙', '♙'],
-    ['♖', '♘', '♗', '♕', '♔', '♗', '♘', '♖'],
-  ];
   List<List<String>> board = [
     ['♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜'],
     ['♟', '♟', '♟', '♟', '♟', '♟', '♟', '♟'],
@@ -31,15 +49,16 @@ class _ChessGameState extends State<ChessGame> {
     ['♙', '♙', '♙', '♙', '♙', '♙', '♙', '♙'],
     ['♖', '♘', '♗', '♕', '♔', '♗', '♘', '♖'],
   ];
-  late List<List<List<String>>> previousBoards = [];
+
+  List<GameState> previousBoards = [];
   ChessPiece? _selectedPiece;
-  List<String>? capturedPieces1 = [];
-  List<String>? capturedPieces2 = [];
+  List<String> capturedPieces1 = [];
+  List<String> capturedPieces2 = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[900],
+      backgroundColor: Color.fromARGB(255, 225, 243, 242),
       appBar: AppBar(
         actions: [
           IconButton(
@@ -53,13 +72,12 @@ class _ChessGameState extends State<ChessGame> {
         ],
         automaticallyImplyLeading: false,
         centerTitle: true,
-        backgroundColor: Colors.green[900],
+        backgroundColor: Color.fromARGB(255, 225, 243, 242),
         title: Text(
           'Chess Game',
           style: TextStyle(
-            color: Colors.pink[200],
-            decorationStyle: TextDecorationStyle.solid,
-            fontSize: 30.0,
+            color: const Color.fromARGB(255, 0, 0, 0),
+            fontSize: 23.0,
           ),
         ),
       ),
@@ -72,35 +90,53 @@ class _ChessGameState extends State<ChessGame> {
             onSquareLongPress: _handleSquareLongPress,
           ),
           Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Wrap(
-              children: [
-                Text(
-                  capturedPieces2.toString(),
-                  style: TextStyle(
-                    color: Colors.pink[200],
-                    fontSize: 20.0,
-                  ),
-                ),
-              ],
+            top: 10,
+            left: 10,
+            child: SizedBox(
+              height: 40,
+              width: MediaQuery.of(context).size.width,
+              child: ListView.builder(
+                shrinkWrap: true,
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                scrollDirection: Axis.horizontal,
+                itemCount: capturedPieces2.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Text(
+                      capturedPieces2[index],
+                      style: TextStyle(
+                        fontSize: 30,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
           Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Wrap(
-              children: [
-                Text(
-                  capturedPieces1.toString(),
-                  style: TextStyle(
-                    color: Colors.pink[200],
-                    fontSize: 20.0,
-                  ),
-                ),
-              ],
+            bottom: 10,
+            left: 10,
+            child: SizedBox(
+              height: 40,
+              width: MediaQuery.of(context).size.width,
+              child: ListView.builder(
+                shrinkWrap: true,
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                scrollDirection: Axis.horizontal,
+                itemCount: capturedPieces1.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Text(
+                      capturedPieces1[index],
+                      style: TextStyle(
+                        fontSize: 30,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ],
@@ -109,21 +145,24 @@ class _ChessGameState extends State<ChessGame> {
   }
 
   bool isLightPiece(String piece) {
-    return Lightpieces.any((row) => row.contains(piece));
+    return ['♙', '♖', '♘', '♗', '♕', '♔'].contains(piece);
   }
 
   void _movePiece(int fromRow, int fromCol, int toRow, int toCol) {
     setState(() {
-      previousBoards.add(board.map((row) => List<String>.from(row)).toList());
+      // Save the current state before making the move
+      previousBoards.add(GameState(
+        board: board.map((row) => List<String>.from(row)).toList(),
+        capturedPieces1: List<String>.from(capturedPieces1),
+        capturedPieces2: List<String>.from(capturedPieces2),
+      ));
 
-      // Check if the destination square is not empty
+      // Capture the opponent's piece if present
       if (board[toRow][toCol].isNotEmpty) {
-        // Capture the opponent's piece
-        print('Captured: ${board[toRow][toCol]}');
         if (isLightPiece(board[toRow][toCol])) {
-          capturedPieces1!.add(board[toRow][toCol]);
+          capturedPieces1.add(board[toRow][toCol]);
         } else {
-          capturedPieces2!.add(board[toRow][toCol]);
+          capturedPieces2.add(board[toRow][toCol]);
         }
       }
 
@@ -156,19 +195,24 @@ class _ChessGameState extends State<ChessGame> {
         ['', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', ''],
         ['♙', '♙', '♙', '♙', '♙', '♙', '♙', '♙'],
-        ['♖', '♘', '♗', '♕', '♔', '♗', '♘', '♖'],
+        ['♖', '♘', '♗', '♚', '♔', '♗', '♘', '♖'],
       ];
       capturedPieces1 = [];
       capturedPieces2 = [];
+      previousBoards.clear();
     });
   }
 
   void undo() {
     if (previousBoards.isNotEmpty) {
-      board = previousBoards.removeLast();
-      setState(() {});
+      GameState lastState = previousBoards.removeLast();
+      setState(() {
+        board = lastState.board;
+        capturedPieces1 = lastState.capturedPieces1;
+        capturedPieces2 = lastState.capturedPieces2;
+      });
     } else {
-      print('No more moves to undo');
+      // print('No more moves to undo');
     }
   }
 }
@@ -211,9 +255,7 @@ class ChessSquare extends StatelessWidget {
             onTap: onTap,
             onLongPress: onLongPress,
             child: Container(
-              color: isWhite
-                  ? Color.fromARGB(255, 184, 134, 116)
-                  : Color.fromARGB(255, 227, 193, 111),
+              color: isWhite ? Color(0xFF769656) : Color(0xFFeeeed2),
               child: Center(
                 child: Text(
                   piece,
